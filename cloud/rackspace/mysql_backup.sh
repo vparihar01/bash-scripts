@@ -56,7 +56,6 @@ MYSQL_PASS="mysql_root_password"
 #From this we get the list of databases present on the server and log everything to mysql_backup.error log
 MYSQL_DB_LIST="$($MYSQL -u $MYSQL_USER -h $MYSQL_HOST $MYSQL_PASS -Bse 'show databases')" 2>>$PATHS/mysql_backup.error
 
-$MYSQLDUMP -h $MYSQL_HOST -u $MYSQL_USER -p'$MYSQL_PASS' crucible_live_db | $GZIP > /var/www/mysql_backup/crucible_live_db_`date '+%m-%d-%Y-%T'`.sql.gz
 
 # Now we iterate over the list of databases present in our server
 for db in $MYSQL_DB_LIST
