@@ -134,7 +134,7 @@ STARTTIME=$(date +%s)
 for db in $MYSQL_DB_LIST
 do
  FILE="$MBD/mysql-$db-$NOWT.gz"
- echo "$MYSQLDUMP -u $MYSQL_USER -h $MYSQL_HOST -p$MYSQL_PASS $db | $GZIP -9 > $FILE"
+# echo "$MYSQLDUMP -u $MYSQL_USER -h $MYSQL_HOST -p$MYSQL_PASS $db | $GZIP -9 > $FILE"
  $MYSQLDUMP $DUMP_OPTS -u $MYSQL_USER -h $MYSQL_HOST -p$MYSQL_PASS $db | $GZIP -9 > "$FILE"
  ERR=$?
  if [ $ERR != 0 ]; then
@@ -146,13 +146,6 @@ do
  fi
  gen_email $SEND_EMAIL $TMP_MSG_FILE 1 "$NOTIFY_MESSAGE"
  echo $NOTIFY_MESSAGE
-# if ["$?" != "0"]; then
-#   backup_error=1
-#   echo "!! Backup failed on database: ${db}" >> $TMP_FILE
-# else
-#   SIZE=$(du -hsc $FILE | awk '{print $1 '\n'}' | tail -n 1)
-#   echo "++ Successfully backed up database: ${db}" >> $TMP_FILE
-# fi
 done
 ENDTIME=$(date +%s)
 DIFFTIME=$(( $ENDTIME - $STARTTIME ))
@@ -197,29 +190,5 @@ $DF -h "$BACK_UP_PATH"
 if [ $SEND_EMAIL -eq 1 ]; then
   $MAIL -s "$NOTIFY_SUBJECT" "$NOTIFY_EMAIL" < "$TMP_MSG_FILE"
   echo "$TMP_MSG_FILE"
-#  rm -f "$TMP_MSG_FILE"
+  rm -f "$TMP_MSG_FILE"
 fi
-
-#------------------------------------------------------------------------------
-# Send confirmation by mail
-#------------------------------------------------------------------------------
-#if [ "$backup_error" -eq 0 ]
-#  then
-#    mv $FILE.tmp $FILE
-#    bzip2 -f $FILE
-#    SIZE=$(du -hs $FILE.bz2 | awk '{print $1 '\n'}')
-#    $MAIL -s "$SUBJECT - successful" $EMAIL << END
-#----------------------------------------------------------
-#                MySQL backup on $HOST
-#                $DATE_LONG
-#----------------------------------------------------------
-#
-#All databases successfully stored in $FILE.bz2
-#Time duration: $((finish_time - start_time)) secs.
-#Backup file size after compression: $SIZE
-#Old backups $cleanup
-#Backup retention time: $KEEP_BACK days
-#END
-#else
-#  echo "$SUBJECT - failed" "$DATE: Backup of MySQL databases failed" | $MAIL -s "$SUBJECT" $EMAIL
-#fi
