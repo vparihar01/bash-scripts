@@ -50,37 +50,46 @@ CHMOD="$(which chmod)"
 #------------------------------------------------------------------------------
 SSH="$(which ssh)"
 
+
 echo "Script started successfully $NOW"
 #------------------------------------------------------------------------------
 #To Change onwer of .ssh directory to $OWNER
 #------------------------------------------------------------------------------
+echo "--------------------------------------------------------"
 echo "Changing onwer of .ssh directory to $OWNER"
 $CHOWN -R $OWNER ~/.ssh
 echo "Owner changed to $OWNER"
+echo "--------------------------------------------------------"
 
 #------------------------------------------------------------------------------
 #To fix the permissions if they are not correct i.e 0700
 #------------------------------------------------------------------------------
+echo "--------------------------------------------------------"
 echo "Changing permissions of .ssh directory to 0700"
 $CHMOD 700 ~/.ssh
 echo"Permissions changed for .ssh directory to 0700"
+echo "--------------------------------------------------------"
 
 #------------------------------------------------------------------------------
 #To fix the permissions of files inside .ssh directory if they are not correct i.e 0600
 #------------------------------------------------------------------------------
+echo "--------------------------------------------------------"
 echo "Changing files permissions inside .ssh directory to 0600"
 $CHMOD 600 ~/.ssh/*
-echo"Permissions changed for files inside .ssh directory to 0600"
+echo "Permissions changed for files inside .ssh directory to 0600"
+echo "--------------------------------------------------------"
 
 #------------------------------------------------------------------------------
 #To remove the ACL flags from under the .ssh directory
 #------------------------------------------------------------------------------
+echo "--------------------------------------------------------"
 echo "Removing the  ACL flags from .ssh directory"
 $CHMOD -R -a# 0 ~/.ssh
-echo"Removed ACL flags"
+echo "Removed ACL flags"
+echo "--------------------------------------------------------"
 
-echo"Failed to add the host to the list of known hosts (~/.ssh/known_hosts) is not resolved."
-echo"Lets check if it is resolved"
+echo "Failed to add the host to the list of known hosts (~/.ssh/known_hosts) is not resolved."
+echo "Lets check if it is resolved"
 
 $SSH -T git@github.com
-echo""
+echo ""
